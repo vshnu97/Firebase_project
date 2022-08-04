@@ -1,11 +1,9 @@
-
-
-
 import 'package:firebase_project/login/view/widgets/container_widget.dart';
+import 'package:firebase_project/routes/navigator.dart';
+import 'package:firebase_project/sign_up/view/screen_sign_up.dart';
 import 'package:firebase_project/utitis/colors/colors.dart';
 import 'package:firebase_project/utitis/sizedbox/sizedbox.dart';
 import 'package:flutter/material.dart';
-
 import '../../utitis/fonts/fonts.dart';
 import 'widgets/button_widget.dart';
 import 'widgets/textfield_widget.dart';
@@ -16,6 +14,7 @@ class ScreenHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size.width;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
@@ -72,13 +71,30 @@ class ScreenHome extends StatelessWidget {
               ],
             ),
             ksizedBox40,
-            TextfieldWidget(
-              hinttext: 'Email',
-              inputType: TextInputType.emailAddress,
-              prefixIcon: Icons.email_outlined,
+            Container(
+              height: size.width / 7,
+              width: size.width / 1,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(right: size.width / 30),
+              decoration: BoxDecoration(
+                  color: kBlackColor.withOpacity(.08),
+                  borderRadius: BorderRadius.circular(10)),
+              child: TextField(
+                keyboardType: TextInputType.emailAddress,
+                style: TextStyle(
+                    color: kBlackColor.withOpacity(.8), letterSpacing: .8),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  prefixIcon: Icon(Icons.email_outlined,
+                      color: kBlackColor.withOpacity(.7)),
+                  hintText: 'Email',
+                  hintStyle: TextStyle(
+                      color: kBlackColor.withOpacity(.5), fontSize: 16),
+                ),
+              ),
             ),
             ksizedbox30,
-            TextfieldWidget(
+            TextfieldWidgetPassword(
               hinttext: 'Password',
               inputType: TextInputType.visiblePassword,
               prefixIcon: Icons.password_outlined,
@@ -110,7 +126,9 @@ class ScreenHome extends StatelessWidget {
                         color: kBlackColor.withOpacity(.4))),
                 wsizedBox20,
                 GestureDetector(
-                  onTap: (){},
+                  onTap: () {
+                    Routes.pushScreen(screen: const ScreenSignUp());
+                  },
                   child: const Text(
                     "Sign Up",
                     style: TextStyle(

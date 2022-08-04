@@ -1,5 +1,6 @@
 import 'package:firebase_project/login/view/screen_home.dart';
 import 'package:firebase_project/login/viewmodel/login.dart';
+import 'package:firebase_project/routes/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: Routes.navigationKey, // navigation
       debugShowCheckedModeBanner: false,
       theme: ThemeData(splashFactory: InkRipple.splashFactory),
       home: const ScreenHome(),

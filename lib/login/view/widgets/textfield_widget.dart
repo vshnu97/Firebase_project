@@ -3,12 +3,12 @@ import 'package:firebase_project/utitis/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TextfieldWidget extends StatelessWidget {
+class TextfieldWidgetPassword extends StatelessWidget {
   String hinttext;
   IconData prefixIcon;
   TextInputType inputType;
   Icon? suffixIcon;
-  TextfieldWidget(
+  TextfieldWidgetPassword(
       {Key? key,
       required this.hinttext,
       required this.inputType,
