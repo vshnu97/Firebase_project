@@ -8,11 +8,13 @@ class TextfieldWidgetPassword extends StatelessWidget {
   IconData prefixIcon;
   TextInputType inputType;
   Icon? suffixIcon;
+  TextEditingController controller;
   TextfieldWidgetPassword(
       {Key? key,
       required this.hinttext,
       required this.inputType,
       required this.prefixIcon,
+      required this.controller,
       this.suffixIcon})
       : super(key: key);
 
@@ -27,11 +29,13 @@ class TextfieldWidgetPassword extends StatelessWidget {
       decoration: BoxDecoration(
           color: kBlackColor.withOpacity(.08),
           borderRadius: BorderRadius.circular(10)),
-      child: Consumer<LoginProv>(builder: (context, value, child) => 
-         TextField(
+      child: Consumer<LoginProv>(
+        builder: (context, value, child) => TextField(
+          controller: controller,
           obscureText: context.read<LoginProv>().isObscure,
           keyboardType: inputType,
-          style: TextStyle(color: kBlackColor.withOpacity(.8), letterSpacing: .8),
+          style:
+              TextStyle(color: kBlackColor.withOpacity(.8), letterSpacing: .8),
           decoration: InputDecoration(
               border: InputBorder.none,
               prefixIcon: Icon(prefixIcon, color: kBlackColor.withOpacity(.7)),
@@ -40,7 +44,6 @@ class TextfieldWidgetPassword extends StatelessWidget {
                   TextStyle(color: kBlackColor.withOpacity(.5), fontSize: 16),
               suffixIcon: IconButton(
                 onPressed: () {
-                  print('sjdgksgskgbvs');
                   context.read<LoginProv>().passwordHide();
                 },
                 icon: Icon(context.read<LoginProv>().isObscure

@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 class SignupTextField extends StatelessWidget {
   String hintText;
   IconData iconprefix;
+  TextEditingController? contoller;
    SignupTextField({
-    Key? key,required this.hintText, required this.iconprefix
+    Key? key,required this.hintText, required this.iconprefix, this.contoller
    
   }) : super(key: key);
 
@@ -24,6 +25,8 @@ class SignupTextField extends StatelessWidget {
           color: kBlackColor.withOpacity(.08),
           borderRadius: BorderRadius.circular(10)),
       child: TextField(
+        
+        controller:contoller,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
             color: kBlackColor.withOpacity(.8), letterSpacing: .8),

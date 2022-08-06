@@ -1,15 +1,30 @@
 import 'package:firebase_project/login/view/widgets/container_widget.dart';
+import 'package:firebase_project/login/viewmodel/auth_prov.dart';
 import 'package:firebase_project/routes/navigator.dart';
 import 'package:firebase_project/sign_up/view/screen_sign_up.dart';
 import 'package:firebase_project/utitis/colors/colors.dart';
 import 'package:firebase_project/utitis/sizedbox/sizedbox.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../utitis/fonts/fonts.dart';
 import 'widgets/button_widget.dart';
 import 'widgets/textfield_widget.dart';
 
-class ScreenHome extends StatelessWidget {
+class ScreenHome extends StatefulWidget {
   const ScreenHome({Key? key}) : super(key: key);
+
+  @override
+  State<ScreenHome> createState() => _ScreenHomeState();
+}
+
+class _ScreenHomeState extends State<ScreenHome> {
+  @override
+  void dispose() {
+    context.read<AuthenticationProv>().emailTextEditingController.dispose();
+    context.read<AuthenticationProv>().passwordTextEditingController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +33,7 @@ class ScreenHome extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -80,6 +95,7 @@ class ScreenHome extends StatelessWidget {
                   color: kBlackColor.withOpacity(.08),
                   borderRadius: BorderRadius.circular(10)),
               child: TextField(
+                controller: context.read<AuthenticationProv>().emailTextEditingController,
                 keyboardType: TextInputType.emailAddress,
                 style: TextStyle(
                     color: kBlackColor.withOpacity(.8), letterSpacing: .8),
@@ -97,7 +113,7 @@ class ScreenHome extends StatelessWidget {
             TextfieldWidgetPassword(
               hinttext: 'Password',
               inputType: TextInputType.visiblePassword,
-              prefixIcon: Icons.password_outlined,
+              prefixIcon: Icons.password_outlined, controller: context.read<AuthenticationProv>().passwordTextEditingController,
             ),
             ksizedBox20,
             Row(
@@ -158,7 +174,7 @@ class DividerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: (_size / 2) - 18,
+      width: (_size / 2) - 25,
       child: const Divider(),
     );
   }

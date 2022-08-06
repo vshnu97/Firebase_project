@@ -1,5 +1,7 @@
-import 'package:firebase_project/login/viewmodel/login.dart';
+import 'package:firebase_project/routes/navigator.dart';
 import 'package:firebase_project/sign_up/view/widget/signup_textfield.dart';
+import 'package:firebase_project/sign_up/view_model/auth_provider.dart';
+import 'package:firebase_project/sign_up/view_model/sign_up.dart';
 import 'package:firebase_project/utitis/colors/colors.dart';
 import 'package:firebase_project/utitis/fonts/fonts.dart';
 import 'package:firebase_project/utitis/sizedbox/sizedbox.dart';
@@ -29,6 +31,7 @@ class ScreenSignUp extends StatelessWidget {
             ),
             ksizedBox20,
             SignupTextField(
+              contoller: context.read<SignUpAuthPro>().signUpTextController ,
               hintText: 'Email',
               iconprefix: Icons.email_outlined,
             ),
@@ -41,9 +44,11 @@ class ScreenSignUp extends StatelessWidget {
               decoration: BoxDecoration(
                   color: kBlackColor.withOpacity(.08),
                   borderRadius: BorderRadius.circular(10)),
-              child: Consumer<LoginProv>(
+              child: Consumer<SignUpProv>(
                 builder: (context, value, child) => TextField(
-                  obscureText: context.read<LoginProv>().isObscure,
+                  controller:context.read<SignUpAuthPro>().signUppasswrdController
+                  ,
+                  obscureText: context.read<SignUpProv>().isObscure,
                   keyboardType: TextInputType.text,
                   style: TextStyle(
                       color: kBlackColor.withOpacity(.8), letterSpacing: .8),
@@ -56,9 +61,9 @@ class ScreenSignUp extends StatelessWidget {
                           color: kBlackColor.withOpacity(.5), fontSize: 16),
                       suffixIcon: IconButton(
                         onPressed: () {
-                          context.read<LoginProv>().passwordHide();
+                          context.read<SignUpProv>().passwordHide();
                         },
-                        icon: Icon(context.read<LoginProv>().isObscure
+                        icon: Icon(context.read<SignUpProv>().isObscure
                             ? Icons.visibility
                             : Icons.visibility_off),
                       )),
@@ -74,9 +79,9 @@ class ScreenSignUp extends StatelessWidget {
               decoration: BoxDecoration(
                   color: kBlackColor.withOpacity(.08),
                   borderRadius: BorderRadius.circular(10)),
-              child: Consumer<LoginProv>(
+              child: Consumer<SignUpProv>(
                 builder: (context, value, child) => TextField(
-                  obscureText: context.read<LoginProv>().isObscure,
+                  obscureText: context.read<SignUpProv>().isobscureConfirm,
                   keyboardType: TextInputType.text,
                   style: TextStyle(
                       color: kBlackColor.withOpacity(.8), letterSpacing: .8),
@@ -84,14 +89,14 @@ class ScreenSignUp extends StatelessWidget {
                       border: InputBorder.none,
                       prefixIcon: Icon(Icons.password_outlined,
                           color: kBlackColor.withOpacity(.7)),
-                      hintText: 'Password',
+                      hintText: 'Confirm Password',
                       hintStyle: TextStyle(
                           color: kBlackColor.withOpacity(.5), fontSize: 16),
                       suffixIcon: IconButton(
                         onPressed: () {
-                          context.read<LoginProv>().passwordHide();
+                          context.read<SignUpProv>().passwordHideConfirm();
                         },
-                        icon: Icon(context.read<LoginProv>().isObscure
+                        icon: Icon(context.read<SignUpProv>().isobscureConfirm
                             ? Icons.visibility
                             : Icons.visibility_off),
                       )),
@@ -102,7 +107,13 @@ class ScreenSignUp extends StatelessWidget {
             SizedBox(
       width: double.infinity,
       child: MaterialButton(
-        onPressed: () {},
+        onPressed: ()async {
+
+           final msg = await context.read<SignUpAuthPro>().signUp();
+          if (msg == '') return;
+          pop(context, msg);
+
+        },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 16),
@@ -115,11 +126,52 @@ class ScreenSignUp extends StatelessWidget {
         color: defaultColor,
       ),
     ),
+     ksizedBox50,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Already have acoount?",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: kBlackColor.withOpacity(.4))),
+                wsizedBox20,
+                GestureDetector(
+                  onTap: () {
+                    Routes.popScreen();
+                  },
+                  child: const Text(
+                    "Log In",
+                    style: TextStyle(
+                        color: defaultColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800),
+                  ),
+                )
+              ],
+            )
 
 
           ],
         ),
       ),
     );
+  }
+   void pop(BuildContext context, String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+        duration:  const Duration(milliseconds: 1500),
+       // animation: const Animation<double>(.5),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color.fromARGB(255, 215, 6, 6),
+        margin: const EdgeInsets.all(20),
+        content: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 9),
+          child: Text(
+            msg,
+            style: const TextStyle(letterSpacing: 2,fontWeight: FontWeight.w500),
+          ),
+        )));
   }
 }

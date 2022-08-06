@@ -1,14 +1,24 @@
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_project/login/view/screen_home.dart';
+import 'package:firebase_project/login/viewmodel/auth_prov.dart';
 import 'package:firebase_project/login/viewmodel/login.dart';
 import 'package:firebase_project/routes/navigator.dart';
+import 'package:firebase_project/sign_up/view_model/auth_provider.dart';
+import 'package:firebase_project/sign_up/view_model/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main(List<String> args) {
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider<LoginProv>(
-      create: ((context) => LoginProv()),
-    )
+    ChangeNotifierProvider<LoginProv>(create: ((context) => LoginProv())),
+    ChangeNotifierProvider<SignUpProv>(create: ((context) => SignUpProv())),
+     ChangeNotifierProvider<SignUpAuthPro>(create: ((context) => SignUpAuthPro(FirebaseAuth.instance))),
+    ChangeNotifierProvider<AuthenticationProv>(create: ((context) => AuthenticationProv(FirebaseAuth.instance))),
+    StreamProvider(create: (context)=> context.watch<AuthenticationProv>().stream(), initialData: null)
   ], child: const MyApp()));
 }
 
