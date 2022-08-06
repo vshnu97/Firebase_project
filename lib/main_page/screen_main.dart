@@ -9,30 +9,27 @@ class ScreenMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   return  StreamBuilder<User?>(
-     stream: context.watch<AuthenticationProv>().stream(),
-     builder: (context, snapshot) {
-     if(!snapshot.hasData){return const ScreenHome();}else{
-       return Scaffold(
-                appBar: AppBar(
-                  title: const Text('Home'),
-                ),
-                 body: const Center(child: Text('Data')),
-              );
-     }
-  });
-// StreamBuilder<User?>(
-//         stream: context.watch<AuthenticationProv>().stream(),
-//         builder: (context, ) {
-//         if(!snapshot.hasData) {return  const ScreenHome();}
-//         print(snapshot.data);
-//           return Scaffold(
-//             appBar: AppBar(
-//               title: const Text('Home'),
-//             ),
-//             body: const Center(child: Text('Data')),
-//           );
-//         });
-//   }
-// }
-  }}
+    return StreamBuilder<User?>(
+        stream: context.watch<AuthenticationProv>().stream(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const ScreenHome();
+          }
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Home'),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    context.read<AuthenticationProv>().signOut();
+                  },
+                  icon: const Icon(Icons.logout_outlined),
+                  splashRadius: 20,
+                )
+              ],
+            ),
+            body: const Center(child: Text('Data')),
+          );
+        });
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:firebase_project/main_page/screen_main.dart';
 import 'package:firebase_project/routes/navigator.dart';
 import 'package:firebase_project/sign_up/view/widget/signup_textfield.dart';
 import 'package:firebase_project/sign_up/view_model/auth_provider.dart';
@@ -31,7 +32,7 @@ class ScreenSignUp extends StatelessWidget {
             ),
             ksizedBox20,
             SignupTextField(
-              contoller: context.read<SignUpAuthPro>().signUpTextController ,
+              contoller: context.read<SignUpAuthPro>().signUpTextController,
               hintText: 'Email',
               iconprefix: Icons.email_outlined,
             ),
@@ -46,8 +47,8 @@ class ScreenSignUp extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10)),
               child: Consumer<SignUpProv>(
                 builder: (context, value, child) => TextField(
-                  controller:context.read<SignUpAuthPro>().signUppasswrdController
-                  ,
+                  controller:
+                      context.read<SignUpAuthPro>().signUppasswrdController,
                   obscureText: context.read<SignUpProv>().isObscure,
                   keyboardType: TextInputType.text,
                   style: TextStyle(
@@ -71,7 +72,7 @@ class ScreenSignUp extends StatelessWidget {
               ),
             ),
             ksizedBox20,
-               Container(
+            Container(
               height: size.width / 7,
               width: size.width / 1,
               alignment: Alignment.center,
@@ -105,28 +106,32 @@ class ScreenSignUp extends StatelessWidget {
             ),
             ksizedbox60,
             SizedBox(
-      width: double.infinity,
-      child: MaterialButton(
-        onPressed: ()async {
-
-           final msg = await context.read<SignUpAuthPro>().signUp();
-          if (msg == '') return;
-          pop(context, msg);
-
-        },
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 16),
-          child: Text(
-            'Sign Up',
-            style: TextStyle(
-                color: kwhiteColor, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ),
-        color: defaultColor,
-      ),
-    ),
-     ksizedBox50,
+              width: double.infinity,
+              child: MaterialButton(
+                onPressed: () async {
+                  final msg = await context.read<SignUpAuthPro>().signUp();
+                  if (msg == '') {
+                    Routes.pushReplacementScreen(screen: const ScreenMain());
+                  } else {
+                    pop(context, msg);
+                  }
+                },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7)),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    'Sign Up',
+                    style: TextStyle(
+                        color: kwhiteColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                color: defaultColor,
+              ),
+            ),
+            ksizedBox50,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -150,19 +155,18 @@ class ScreenSignUp extends StatelessWidget {
                 )
               ],
             )
-
-
           ],
         ),
       ),
     );
   }
-   void pop(BuildContext context, String msg) {
+
+  void pop(BuildContext context, String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-        duration:  const Duration(milliseconds: 1500),
-       // animation: const Animation<double>(.5),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        duration: const Duration(milliseconds: 1500),
+        // animation: const Animation<double>(.5),
         behavior: SnackBarBehavior.floating,
         backgroundColor: const Color.fromARGB(255, 215, 6, 6),
         margin: const EdgeInsets.all(20),
@@ -170,7 +174,8 @@ class ScreenSignUp extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 9),
           child: Text(
             msg,
-            style: const TextStyle(letterSpacing: 2,fontWeight: FontWeight.w500),
+            style:
+                const TextStyle(letterSpacing: 2, fontWeight: FontWeight.w500),
           ),
         )));
   }

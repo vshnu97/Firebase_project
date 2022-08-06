@@ -1,9 +1,9 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_project/login/view/screen_home.dart';
 import 'package:firebase_project/login/viewmodel/auth_prov.dart';
 import 'package:firebase_project/login/viewmodel/login.dart';
+import 'package:firebase_project/main_page/screen_main.dart';
 import 'package:firebase_project/routes/navigator.dart';
 import 'package:firebase_project/sign_up/view_model/auth_provider.dart';
 import 'package:firebase_project/sign_up/view_model/sign_up.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: Routes.navigationKey, // navigation
       debugShowCheckedModeBanner: false,
       theme: ThemeData(splashFactory: InkRipple.splashFactory),
-      home: const ScreenHome(),
+      home: const ScreenMain(),
     );
   }
 }

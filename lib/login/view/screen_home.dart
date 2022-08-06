@@ -1,13 +1,14 @@
 import 'package:firebase_project/login/view/widgets/container_widget.dart';
 import 'package:firebase_project/login/viewmodel/auth_prov.dart';
+import 'package:firebase_project/main_page/screen_main.dart';
 import 'package:firebase_project/routes/navigator.dart';
 import 'package:firebase_project/sign_up/view/screen_sign_up.dart';
 import 'package:firebase_project/utitis/colors/colors.dart';
 import 'package:firebase_project/utitis/sizedbox/sizedbox.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utitis/fonts/fonts.dart';
-import 'widgets/button_widget.dart';
 import 'widgets/textfield_widget.dart';
 
 class ScreenHome extends StatefulWidget {
@@ -18,13 +19,13 @@ class ScreenHome extends StatefulWidget {
 }
 
 class _ScreenHomeState extends State<ScreenHome> {
-  @override
-  void dispose() {
-    context.read<AuthenticationProv>().emailTextEditingController.dispose();
-    context.read<AuthenticationProv>().passwordTextEditingController.dispose();
+  // @override
+  // void dispose() {
+  //    super.dispose();
+  //   context.read<AuthenticationProv>().emialcntrllr.dispose();
+  //   context.read<AuthenticationProv>().passwrdcntrllr.dispose();
 
-    super.dispose();
-  }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +96,9 @@ class _ScreenHomeState extends State<ScreenHome> {
                   color: kBlackColor.withOpacity(.08),
                   borderRadius: BorderRadius.circular(10)),
               child: TextField(
-                controller: context.read<AuthenticationProv>().emailTextEditingController,
+                controller: context
+                    .read<AuthenticationProv>()
+                    .emailTextEditingController,
                 keyboardType: TextInputType.emailAddress,
                 style: TextStyle(
                     color: kBlackColor.withOpacity(.8), letterSpacing: .8),
@@ -113,7 +116,10 @@ class _ScreenHomeState extends State<ScreenHome> {
             TextfieldWidgetPassword(
               hinttext: 'Password',
               inputType: TextInputType.visiblePassword,
-              prefixIcon: Icons.password_outlined, controller: context.read<AuthenticationProv>().passwordTextEditingController,
+              prefixIcon: Icons.password_outlined,
+              controller: context
+                  .read<AuthenticationProv>()
+                  .passwordTextEditingController,
             ),
             ksizedBox20,
             Row(
@@ -130,7 +136,47 @@ class _ScreenHomeState extends State<ScreenHome> {
               ],
             ),
             ksizedbox60,
-            const ButtonWidget(),
+            Consumer<AuthenticationProv>(
+              builder: (context, value, child) => Column(
+                children: [
+                  value.activityIndicator
+                      ? const SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 11.5),
+                            child: Center(
+                                child: CupertinoActivityIndicator(
+                              radius: 16,
+                            )),
+                          ))
+                      : 
+                     
+                       SizedBox(
+      width: double.infinity,
+      child: MaterialButton(
+        onPressed: () async {
+          final msg = await context.read<AuthenticationProv>().logIn();
+          if (msg == '') {
+            Routes.pushReplacementScreen(screen: const ScreenMain());
+          } else {
+            pop(context, msg);
+          }
+        },
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 16),
+          child: Text(
+            'Login',
+            style: TextStyle(
+                color: kwhiteColor, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        color: defaultColor,
+      ),
+    )
+                ],
+              ),
+            ),
             ksizedBox50,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -160,6 +206,23 @@ class _ScreenHomeState extends State<ScreenHome> {
       ),
     );
   }
+   void pop(BuildContext context, String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        duration: const Duration(milliseconds: 1500),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color.fromARGB(255, 215, 6, 6),
+        margin: const EdgeInsets.all(20),
+        content: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 9),
+          child: Text(
+            msg,
+            style:
+                const TextStyle(letterSpacing: 2, fontWeight: FontWeight.w500),
+          ),
+        )));
+  }
 }
 
 class DividerWidget extends StatelessWidget {
@@ -178,4 +241,5 @@ class DividerWidget extends StatelessWidget {
       child: const Divider(),
     );
   }
+   
 }
