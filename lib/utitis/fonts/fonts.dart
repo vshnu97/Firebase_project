@@ -5,7 +5,7 @@ primaryFont(
     {double fsize = 16,
     fweight = FontWeight.normal,
     fcolor = const Color(0Xff192a56)}) {
-  return GoogleFonts.raleway(
+  return GoogleFonts.dmSans(
       fontSize: fsize,
       fontWeight: fweight,
       height: 4,

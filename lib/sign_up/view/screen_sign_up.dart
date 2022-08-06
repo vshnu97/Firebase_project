@@ -15,147 +15,174 @@ class ScreenSignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Text(
-              'Sign Up',
-              style: primaryFont(fsize: 36, fweight: FontWeight.w800),
-            ),
-            ksizedbox60,
-            SignupTextField(
-              hintText: 'Name',
-              iconprefix: Icons.person,
-            ),
-            ksizedBox20,
-            SignupTextField(
-              contoller: context.read<SignUpAuthPro>().signUpTextController,
-              hintText: 'Email',
-              iconprefix: Icons.email_outlined,
-            ),
-            ksizedBox20,
-            Container(
-              height: size.width / 7,
-              width: size.width / 1,
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(right: size.width / 30),
-              decoration: BoxDecoration(
-                  color: kBlackColor.withOpacity(.08),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Consumer<SignUpProv>(
-                builder: (context, value, child) => TextField(
-                  controller:
-                      context.read<SignUpAuthPro>().signUppasswrdController,
-                  obscureText: context.read<SignUpProv>().isObscure,
-                  keyboardType: TextInputType.text,
-                  style: TextStyle(
-                      color: kBlackColor.withOpacity(.8), letterSpacing: .8),
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.password_outlined,
-                          color: kBlackColor.withOpacity(.7)),
-                      hintText: 'Password',
-                      hintStyle: TextStyle(
-                          color: kBlackColor.withOpacity(.5), fontSize: 16),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          context.read<SignUpProv>().passwordHide();
-                        },
-                        icon: Icon(context.read<SignUpProv>().isObscure
-                            ? Icons.visibility
-                            : Icons.visibility_off),
-                      )),
-                ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(
+                'Sign Up',
+                style: primaryFont(fsize: 36, fweight: FontWeight.w900),
               ),
-            ),
-            ksizedBox20,
-            Container(
-              height: size.width / 7,
-              width: size.width / 1,
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(right: size.width / 30),
-              decoration: BoxDecoration(
-                  color: kBlackColor.withOpacity(.08),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Consumer<SignUpProv>(
-                builder: (context, value, child) => TextField(
-                  obscureText: context.read<SignUpProv>().isobscureConfirm,
-                  keyboardType: TextInputType.text,
-                  style: TextStyle(
-                      color: kBlackColor.withOpacity(.8), letterSpacing: .8),
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.password_outlined,
-                          color: kBlackColor.withOpacity(.7)),
-                      hintText: 'Confirm Password',
-                      hintStyle: TextStyle(
-                          color: kBlackColor.withOpacity(.5), fontSize: 16),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          context.read<SignUpProv>().passwordHideConfirm();
-                        },
-                        icon: Icon(context.read<SignUpProv>().isobscureConfirm
-                            ? Icons.visibility
-                            : Icons.visibility_off),
-                      )),
-                ),
+              ksizedbox60,
+              SignupTextField(
+                hintText: 'Name',
+                iconprefix: Icons.person,
               ),
-            ),
-            ksizedbox60,
-            SizedBox(
-              width: double.infinity,
-              child: MaterialButton(
-                onPressed: () async {
-                  final msg = await context.read<SignUpAuthPro>().signUp();
-                  if (msg == '') {
-                    Routes.pushReplacementScreen(screen: const ScreenMain());
-                  } else {
-                    pop(context, msg);
-                  }
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(7)),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    'Sign Up',
+              ksizedBox20,
+              SignupTextField(
+                contoller: context.read<SignUpAuthPro>().signUpTextController,
+                hintText: 'Email',
+                iconprefix: Icons.email_outlined,
+              ),
+              ksizedBox20,
+              Container(
+                height: size.width / 7,
+                width: size.width / 1,
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(right: size.width / 30),
+                decoration: BoxDecoration(
+                    color: kBlackColor.withOpacity(.08),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Consumer<SignUpProv>(
+                  builder: (context, value, child) => TextFormField(
+                    //    validator: (value){
+                    //   if(value==null||value.isEmpty){
+                    //     return 'Enter the password';
+                    //   }else{
+                    //      return null ;
+                    //   }
+                    // },
+
+                    controller:
+                        context.read<SignUpAuthPro>().signUppasswrdController,
+                    obscureText: context.read<SignUpProv>().isObscure,
+                    keyboardType: TextInputType.text,
                     style: TextStyle(
-                        color: kwhiteColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                        color: kBlackColor.withOpacity(.8), letterSpacing: .8),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.password_outlined,
+                            color: kBlackColor.withOpacity(.7)),
+                        hintText: 'Password',
+                        hintStyle: TextStyle(
+                            color: kBlackColor.withOpacity(.5), fontSize: 16),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            context.read<SignUpProv>().passwordHide();
+                          },
+                          icon: Icon(context.read<SignUpProv>().isObscure
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        )),
                   ),
                 ),
-                color: defaultColor,
               ),
-            ),
-            ksizedBox50,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Already have acoount?",
+              ksizedBox20,
+              Container(
+                height: size.width / 7,
+                width: size.width / 1,
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(right: size.width / 30),
+                decoration: BoxDecoration(
+                    color: kBlackColor.withOpacity(.08),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Consumer<SignUpProv>(
+                  builder: (context, value, child) => TextFormField(
+                    controller:
+                        context.read<SignUpAuthPro>().signUpConfrmController,
+                    //  validator: (value){
+                    //   if(value==null||value.isEmpty){
+                    //     return 'Enter the password';
+                    //   }else if(context.read<SignUpAuthPro>().signUppasswrdController!=context.read<SignUpAuthPro>().signUpConfrmController){
+                    //     return "Password does not match";
+                    //   }
+                    //   else{
+                    //      return null ;
+                    //   }
+                    // },
+
+                    obscureText: context.read<SignUpProv>().isobscureConfirm,
+                    keyboardType: TextInputType.text,
                     style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: kBlackColor.withOpacity(.4))),
-                wsizedBox20,
-                GestureDetector(
-                  onTap: () {
-                    Routes.popScreen();
+                        color: kBlackColor.withOpacity(.8), letterSpacing: .8),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.password_outlined,
+                            color: kBlackColor.withOpacity(.7)),
+                        hintText: 'Confirm Password',
+                        hintStyle: TextStyle(
+                            color: kBlackColor.withOpacity(.5), fontSize: 16),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            context.read<SignUpProv>().passwordHideConfirm();
+                          },
+                          icon: Icon(context.read<SignUpProv>().isobscureConfirm
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        )),
+                  ),
+                ),
+              ),
+              ksizedbox60,
+              SizedBox(
+                width: double.infinity,
+                child: MaterialButton(
+                  onPressed: () async {
+                    final msg =
+                        await context.read<SignUpAuthPro>().signUp(context);
+                    if (msg == '') {
+                      Routes.pushReplacementScreen(screen: const ScreenMain());
+                    } else {
+                      pop(context, msg);
+                    }
                   },
-                  child: const Text(
-                    "Log In",
-                    style: TextStyle(
-                        color: defaultColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7)),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                          color: kwhiteColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
-                )
-              ],
-            )
-          ],
+                  color: defaultColor,
+                ),
+              ),
+              ksizedBox50,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already have acoount?",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: kBlackColor.withOpacity(.4))),
+                  wsizedBox20,
+                  GestureDetector(
+                    onTap: () {
+                      Routes.popScreen();
+                    },
+                    child: const Text(
+                      "Log In",
+                      style: TextStyle(
+                          color: defaultColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

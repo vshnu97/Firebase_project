@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationProv extends ChangeNotifier {
   FirebaseAuth firebase;
@@ -35,4 +36,30 @@ class AuthenticationProv extends ChangeNotifier {
   Future<void> signOut() async {
     await firebase.signOut();
   }
+
+Future<String>googleLogIn()async{
+  try{
+    _activityIndicator = true;
+      notifyListeners();
+      final isLogged = await GoogleSignIn().isSignedIn();
+      if(isLogged)GoogleSignIn().signOut();
+      final result = await GoogleSignIn().signIn();
+      if(result== null){
+         _activityIndicator = false;
+      notifyListeners();
+      return Future.value("Ocurred an error");
+
+      }
+      final cred = await result.authentication;
+      await firebase.signInWithCredential(GoogleAuthProvider.credential(accessToken: cred.accessToken,idToken: cred.idToken));
+ _activityIndicator = false;
+      notifyListeners();
+     return Future.value('');
+  }on FirebaseAuthException catch(exe){
+     _activityIndicator = true;
+      notifyListeners();
+      return Future.value(exe.message);
+  }
+ 
+}
 }

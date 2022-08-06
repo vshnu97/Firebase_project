@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_project/login/viewmodel/auth_prov.dart';
@@ -16,9 +15,13 @@ void main(List<String> args) async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<LoginProv>(create: ((context) => LoginProv())),
     ChangeNotifierProvider<SignUpProv>(create: ((context) => SignUpProv())),
-     ChangeNotifierProvider<SignUpAuthPro>(create: ((context) => SignUpAuthPro(FirebaseAuth.instance))),
-    ChangeNotifierProvider<AuthenticationProv>(create: ((context) => AuthenticationProv(FirebaseAuth.instance))),
-    StreamProvider(create: (context)=> context.watch<AuthenticationProv>().stream(), initialData: null)
+    ChangeNotifierProvider<SignUpAuthPro>(
+        create: ((context) => SignUpAuthPro(FirebaseAuth.instance))),
+    ChangeNotifierProvider<AuthenticationProv>(
+        create: ((context) => AuthenticationProv(FirebaseAuth.instance))),
+    StreamProvider(
+        create: (context) => context.watch<AuthenticationProv>().stream(),
+        initialData: null)
   ], child: const MyApp()));
 }
 
