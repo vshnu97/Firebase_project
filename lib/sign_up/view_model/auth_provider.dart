@@ -1,6 +1,11 @@
 
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_project/sign_up/view_model/image_prov.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignUpAuthPro extends ChangeNotifier {
   FirebaseAuth firebase;
@@ -9,10 +14,22 @@ class SignUpAuthPro extends ChangeNotifier {
   Stream<User?> stream() {
     return firebase.authStateChanges();
   }
-
+ final  signUpPhoneNumControler = TextEditingController();
+  final signUpnameController = TextEditingController();
   final signUpTextController = TextEditingController();
   final signUppasswrdController = TextEditingController();
   final signUpConfrmController = TextEditingController();
+  final products = FirebaseFirestore.instance.collection('demo');
+  addDataBAse(BuildContext context) async {
+    await products.add({
+      'name': signUpnameController.text,
+      'email': signUpTextController.text,
+      'phone': signUpPhoneNumControler.text,
+       'image':  context.read<PicImageProv>().imageAvtr,
+    });
+  }
+
+  
 
   Future<String> signUp(BuildContext context) async {
     String psswrd2 = signUppasswrdController.text.trim();

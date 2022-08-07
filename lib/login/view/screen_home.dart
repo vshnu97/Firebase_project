@@ -1,6 +1,6 @@
 import 'package:firebase_project/login/view/widgets/container_widget.dart';
 import 'package:firebase_project/login/viewmodel/auth_prov.dart';
-import 'package:firebase_project/main_page/screen_main.dart';
+import 'package:firebase_project/main_page/view/screen_main.dart';
 import 'package:firebase_project/routes/navigator.dart';
 import 'package:firebase_project/sign_up/view/screen_sign_up.dart';
 import 'package:firebase_project/utitis/colors/colors.dart';
@@ -36,7 +36,7 @@ class _ScreenHomeState extends State<ScreenHome> {
             children: [
               Text(
                 'Create Account',
-                style: primaryFont(fsize: 36, fweight: FontWeight.w900),
+                style: primaryFont(fsize: 38, fweight: FontWeight.w900,hght: 3),
               ),
               ksizedBox50,
               Row(
