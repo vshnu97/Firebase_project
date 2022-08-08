@@ -1,9 +1,7 @@
-
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_project/sign_up/view_model/image_prov.dart';
+import 'package:firebase_project/utitis/img.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,22 +12,22 @@ class SignUpAuthPro extends ChangeNotifier {
   Stream<User?> stream() {
     return firebase.authStateChanges();
   }
- final  signUpPhoneNumControler = TextEditingController();
+
+  final signUpPhoneNumControler = TextEditingController();
   final signUpnameController = TextEditingController();
-  final signUpTextController = TextEditingController();
+  final signUpEmailController = TextEditingController();
   final signUppasswrdController = TextEditingController();
   final signUpConfrmController = TextEditingController();
   final products = FirebaseFirestore.instance.collection('demo');
-  addDataBAse(BuildContext context) async {
+  addDataBAse(BuildContext context, String email) async {
     await products.add({
       'name': signUpnameController.text,
-      'email': signUpTextController.text,
+      'email': signUpEmailController.text,
       'phone': signUpPhoneNumControler.text,
-       'image':  context.read<PicImageProv>().imageAvtr,
+      'image': context.read<PicImageProv>().imageAvtr,
+      'password': signUppasswrdController.text,
     });
   }
-
-  
 
   Future<String> signUp(BuildContext context) async {
     String psswrd2 = signUppasswrdController.text.trim();
@@ -54,8 +52,9 @@ class SignUpAuthPro extends ChangeNotifier {
     } else {
       try {
         await firebase.createUserWithEmailAndPassword(
-            email: signUpTextController.text.trim(),
+            email: signUpEmailController.text.trim(),
             password: signUppasswrdController.text.trim());
+        await addDataBAse(context, signUpEmailController.text);
 
         return Future.value('');
       } on FirebaseAuthException catch (exep) {
@@ -63,5 +62,14 @@ class SignUpAuthPro extends ChangeNotifier {
       }
     }
     return 'Make sure both password are same';
+  }
+
+  void disposeFunction(BuildContext context) {
+    signUpPhoneNumControler.text = '';
+    signUpnameController.text = '';
+    signUpEmailController.text = '';
+    signUppasswrdController.text = '';
+    signUpConfrmController.text = '';
+    context.read<PicImageProv>().imageAvtr = encodeImage;
   }
 }

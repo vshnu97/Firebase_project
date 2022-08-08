@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       appBarTheme: const AppBarTheme(backgroundColor: Color(0xff94d0cd) )
       
       ),
-      home: const ScreenMain(),
+      home:  const ScreenMain(),
     );
   }
 }

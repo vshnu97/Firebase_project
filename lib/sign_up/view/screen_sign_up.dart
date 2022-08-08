@@ -42,7 +42,7 @@ class ScreenSignUp extends StatelessWidget {
               ),
               ksizedBox20,
               SignupTextField(
-                contoller: context.read<SignUpAuthPro>().signUpTextController,
+                contoller: context.read<SignUpAuthPro>().signUpEmailController,
                 hintText: 'Email',
                 iconprefix: Icons.email_outlined, inputType:  TextInputType.emailAddress,
               ),
@@ -65,7 +65,7 @@ class ScreenSignUp extends StatelessWidget {
                     final msg =
                         await context.read<SignUpAuthPro>().signUp(context);
                     if (msg == '') {
-                      await context.read<SignUpAuthPro>().addDataBAse(context);
+                     
                       Routes.pushReplacementScreen(screen: const ScreenMain());
                     } else {
                       pop(context, msg);
