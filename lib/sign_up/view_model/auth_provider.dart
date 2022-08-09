@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_project/main_page/viewmodel/main_prov.dart';
 import 'package:firebase_project/sign_up/view_model/image_prov.dart';
 import 'package:firebase_project/utitis/img.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 
 class SignUpAuthPro extends ChangeNotifier {
   FirebaseAuth firebase;
@@ -18,9 +20,9 @@ class SignUpAuthPro extends ChangeNotifier {
   final signUpEmailController = TextEditingController();
   final signUppasswrdController = TextEditingController();
   final signUpConfrmController = TextEditingController();
-  final products = FirebaseFirestore.instance.collection('demo');
+
   addDataBAse(BuildContext context, String email) async {
-    await products.add({
+    await FirebaseFirestore.instance.collection(email).add({
       'name': signUpnameController.text,
       'email': signUpEmailController.text,
       'phone': signUpPhoneNumControler.text,
@@ -55,6 +57,7 @@ class SignUpAuthPro extends ChangeNotifier {
             email: signUpEmailController.text.trim(),
             password: signUppasswrdController.text.trim());
         await addDataBAse(context, signUpEmailController.text);
+       emailTemp = signUpEmailController.text.trim();
 
         return Future.value('');
       } on FirebaseAuthException catch (exep) {
@@ -72,4 +75,26 @@ class SignUpAuthPro extends ChangeNotifier {
     signUpConfrmController.text = '';
     context.read<PicImageProv>().imageAvtr = encodeImage;
   }
+
+  updateData(
+      {required BuildContext context,
+      required String imageQ,
+      required String phone,
+      required String name,
+      required String email,
+      required String password,
+      required String documentQ}) {
+    String finalImage = context.read<MainScreenProv>().imageAvtr.trim().isEmpty
+        ? imageQ
+        : context.read<MainScreenProv>().imageAvtr;
+    FirebaseFirestore.instance.collection(emailTemp).doc(documentQ).set({
+      'image': finalImage,
+      'phone': phone,
+      'name': name,
+      'email': email,
+      'password': password,
+    });
+  }
+
+ 
 }

@@ -65,7 +65,7 @@ class ScreenSignUp extends StatelessWidget {
                     final msg =
                         await context.read<SignUpAuthPro>().signUp(context);
                     if (msg == '') {
-                     
+                     context.read<SignUpAuthPro>().disposeFunction(context);
                       Routes.pushReplacementScreen(screen: const ScreenMain());
                     } else {
                       pop(context, msg);

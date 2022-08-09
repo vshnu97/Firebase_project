@@ -1,93 +1,124 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_project/login/view/screen_home.dart';
 import 'package:firebase_project/login/viewmodel/auth_prov.dart';
 import 'package:firebase_project/main_page/viewmodel/main_prov.dart';
+import 'package:firebase_project/sign_up/view_model/auth_provider.dart';
 import 'package:firebase_project/utitis/colors/colors.dart';
 import 'package:firebase_project/utitis/sizedbox/sizedbox.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ScreenMain extends StatelessWidget {
+class ScreenMain extends StatefulWidget {
   const ScreenMain({Key? key}) : super(key: key);
 
   @override
+  State<ScreenMain> createState() => _ScreenMainState();
+}
+
+class _ScreenMainState extends State<ScreenMain> {
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Home'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                context.read<AuthenticationProv>().signOut();
+    return StreamBuilder<User?>(
+        stream: context.watch<AuthenticationProv>().stream(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const ScreenHome();
+          } else {
+            return GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
               },
-              icon: const Icon(Icons.logout_outlined),
-              splashRadius: 20,
-            )
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: StreamBuilder(
-              stream: context.read<MainScreenProv>().emailModel.snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  final dataQ = snapshot.data!.docs.first;
-                  return Column(
-                    children: [
-                      ksizedBox50,
-                      ImageWidget(dataQ: dataQ),
-                      RawMaterialButton(
-                        onPressed: () {},
-                        elevation: 4.0,
-                        fillColor: Colors.green,
-                        child: const Text(
-                          'Update',
-                          style: TextStyle(
-                              color: kBlackColor, fontWeight: FontWeight.bold),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        shape: const RoundedRectangleBorder(),
-                      ),
-                      ksizedBox50,
-                      MainScreenTextFieldWidget(
-                        controllerMain:
-                            context.read<MainScreenProv>().nameTextController,
-                        iconMain: Icons.person,
-                        hintTextMain: dataQ['name'],
-                        keyboardType: TextInputType.text,
-                      ),
-                      ksizedBox20,
-                      MainScreenTextFieldWidget(
-                        controllerMain:
-                            context.read<MainScreenProv>().phoneTextController,
-                        iconMain: Icons.phone_android,
-                        hintTextMain: dataQ['phone'],
-                        keyboardType: TextInputType.number,
-                      ),
-                      ksizedBox20,
-                      MainScreenTextFieldWidget(
-                        controllerMain:
-                            context.read<MainScreenProv>().phoneTextController,
-                        iconMain: Icons.email_outlined,
-                        hintTextMain: dataQ['email'],
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                    ],
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
-        ),
-      ),
-    );
+              child: Scaffold(
+                appBar: AppBar(
+                  title: const Text('Home'),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        context.read<AuthenticationProv>().signOut();
+                      },
+                      icon: const Icon(Icons.logout_outlined),
+                      splashRadius: 20,
+                    )
+                  ],
+                ),
+                body: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection(emailTemp)
+                          .snapshots(),
+                      builder:
+                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasData) {
+                          final dataQ = snapshot.data!.docs.first;
+                          return Column(
+                            children: [
+                              ksizedBox50,
+                              ImageWidget(dataQ: dataQ),
+                              RawMaterialButton(
+                                onPressed: () {
+                                  context.read<SignUpAuthPro>().updateData(
+                                      context: context,
+                                      imageQ: dataQ['image'],
+                                      documentQ: dataQ.id,
+                                      email: dataQ['email'],
+                                      name: dataQ['name'],
+                                      password: dataQ['password'],
+                                      phone: dataQ['phone']);
+                                },
+                                elevation: 4.0,
+                                fillColor: Colors.green,
+                                child: const Text(
+                                  'Update',
+                                  style: TextStyle(
+                                      color: kBlackColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                shape: const RoundedRectangleBorder(),
+                              ),
+                              ksizedBox50,
+                              MainScreenTextFieldWidget(
+                                controllerMain: context
+                                    .read<MainScreenProv>()
+                                    .nameTextController,
+                                iconMain: Icons.person,
+                                hintTextMain: dataQ['name'],
+                                keyboardType: TextInputType.text,
+                              ),
+                              ksizedBox20,
+                              MainScreenTextFieldWidget(
+                                controllerMain: context
+                                    .read<MainScreenProv>()
+                                    .phoneTextController,
+                                iconMain: Icons.phone_android,
+                                hintTextMain: dataQ['phone'],
+                                keyboardType: TextInputType.number,
+                              ),
+                              ksizedBox20,
+                              MainScreenTextFieldWidget(
+                                controllerMain: context
+                                    .read<MainScreenProv>()
+                                    .phoneTextController,
+                                iconMain: Icons.email_outlined,
+                                hintTextMain: dataQ['email'],
+                                keyboardType: TextInputType.emailAddress,
+                              ),
+                            ],
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      }),
+                ),
+              ),
+            );
+          }
+        });
   }
 }
 
@@ -113,7 +144,9 @@ class ImageWidget extends StatelessWidget {
               CircleAvatar(
                 radius: 60,
                 backgroundImage: MemoryImage(
-                  const Base64Decoder().convert(value.imageAvtr.trim().isEmpty?    dataQ['image']:value.imageAvtr),
+                  const Base64Decoder().convert(value.imageAvtr.trim().isEmpty
+                      ? dataQ['image']
+                      : value.imageAvtr),
                 ),
               ),
               Positioned(

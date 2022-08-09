@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_project/main_page/viewmodel/main_prov.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationProv extends ChangeNotifier {
   FirebaseAuth firebase;
@@ -25,12 +27,19 @@ class AuthenticationProv extends ChangeNotifier {
           password: passwordTextEditingController.text.trim());
       _activityIndicator = false;
       notifyListeners();
+      sharedFunction( emailTextEditingController.text.trim());
       return Future.value('');
     } on FirebaseAuthException catch (exep) {
       _activityIndicator = false;
       notifyListeners();
       return Future.value(exep.message);
     }
+  }
+
+   sharedFunction(String email) async {
+    emailTemp = email;
+    final obj = await SharedPreferences.getInstance();
+    obj.setString('userName', email);
   }
 
   Future<void> signOut() async {

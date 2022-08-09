@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 
-String emailTemp = 'visnu@nsfc.cpm';
+String emailTemp ='user';
 
 class MainScreenProv extends ChangeNotifier {
   final nameTextController = TextEditingController();
@@ -19,6 +19,8 @@ class MainScreenProv extends ChangeNotifier {
     imageAvtr = base64Encode(temp);
     notifyListeners();
   }
+
+  
 
   final emailModel = FirebaseFirestore.instance.collection(emailTemp);
 }
